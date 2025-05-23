@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
-  signInWithRedirect,
   signInWithPopup,
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
 } from "firebase/auth";
 
@@ -25,14 +25,34 @@ provider.setCustomParameters({
   prompt: "select_account",
 });
 
+// FIREBASE AUTHENTICATION FUNCTIONALITY
+
 export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
-export const signInWithGoogleRedirect = () =>
-  signInWithRedirect(auth, provider);
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
+};
+
+// FIREBASE DATABASE FUNCTIONALITY
 
 export const db = getFirestore();
 
-export const createUserDocumentFromAuth = async (userAuth) => {
+/*********************************************************************/
+/**
+ * If the user document does not exist in Firestore, create it.
+ *
+ * @param {Object} userAuth - The user's authentication information.
+ * @returns {Object} The user document reference from Firestore.
+ */
+/*********************************************************************/
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInfo = {}
+) => {
+  if (!userAuth) return;
+
   const userDocumentReference = doc(db, "users", userAuth.uid);
   const userSnapshot = await getDoc(userDocumentReference);
 
@@ -41,7 +61,12 @@ export const createUserDocumentFromAuth = async (userAuth) => {
     const createdAt = new Date();
 
     try {
-      await setDoc(userDocumentReference, { displayName, email, createdAt });
+      await setDoc(userDocumentReference, {
+        displayName,
+        email,
+        createdAt,
+        ...additionalInfo,
+      });
       alert("Successfully created the user!");
     } catch (err) {
       console.log("Error creating the user,", err.message);
