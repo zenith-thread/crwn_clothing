@@ -1,8 +1,10 @@
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
+  onAuthStateChanged,
   signInWithPopup,
   signInWithEmailAndPassword,
+  signOut,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
 } from "firebase/auth";
@@ -21,16 +23,18 @@ import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseApp = initializeApp(firebaseConfig);
 
+// FIREBASE AUTHENTICATION FUNCTIONALITY
+export const auth = getAuth();
+
+// google sign in
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
   prompt: "select_account",
 });
 
-// FIREBASE AUTHENTICATION FUNCTIONALITY
-
-export const auth = getAuth();
 export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
 
+// creating and sign in with email and password
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
   if (!email || !password) return;
 
@@ -41,19 +45,16 @@ export const signInUserWithEmailAndPassword = async (email, password) => {
 
   return await signInWithEmailAndPassword(auth, email, password);
 };
+export const signOutUser = async () => await signOut(auth);
+
+// onAuth State Listener
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
 
 // FIREBASE DATABASE FUNCTIONALITY
 
 export const db = getFirestore();
 
-/*********************************************************************/
-/**
- * If the user document does not exist in Firestore, create it.
- *
- * @param {Object} userAuth - The user's authentication information.
- * @returns {Object} The user document reference from Firestore.
- */
-/*********************************************************************/
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInfo = {}

@@ -34,6 +34,7 @@ const SignInForm = () => {
 
     try {
       await signInUserWithEmailAndPassword(email, password);
+      resetFormFields();
     } catch (err) {
       switch (err.code) {
         case "auth/invalid-credential":
@@ -55,8 +56,7 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
   return (
