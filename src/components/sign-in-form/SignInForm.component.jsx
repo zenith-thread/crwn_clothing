@@ -9,6 +9,7 @@ import "./SignInForm.styles.scss";
 // COMPONENTS
 import FormInput from "../form-input/FormInput.component";
 import Button from "../button/Button.component";
+import { BUTTON_TYPE_CLASSES } from "../button/Button.component";
 
 const defautlFormFields = {
   email: "",
@@ -83,7 +84,11 @@ const SignInForm = () => {
         />
         <div className="buttons-container">
           <Button type="submit">Sign In</Button>
-          <Button type="button" buttonType="google" onClick={signInWithGoogle}>
+          <Button
+            type="button"
+            buttonType={BUTTON_TYPE_CLASSES.google}
+            onClick={signInWithGoogle}
+          >
             Google Sign In
           </Button>
         </div>
