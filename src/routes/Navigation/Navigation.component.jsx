@@ -10,10 +10,10 @@ import CartDropdown from "../../components/cart-dropdown/CartDropdown.component"
 // AUTHENTICATION
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 
-// CONTEXT
-import { useContext } from "react";
-import { UserContext } from "../../contexts/User.context";
-import { CartContext } from "../../contexts/Cart.context";
+// REDUX
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "../../store/user/user.selector.js";
+import { selectIsCartOpen } from "../../store/cart/cart.selector.js";
 
 // STYLED OCOMPONENTS
 import {
@@ -24,8 +24,9 @@ import {
 } from "./Navigation.styles.jsx";
 
 const Navigation = () => {
-  const { currentUser } = useContext(UserContext);
-  const { isCartOpen } = useContext(CartContext);
+  // REDUX
+  const currentUser = useSelector(selectCurrentUser);
+  const isCartOpen = useSelector(selectIsCartOpen);
 
   return (
     <>
