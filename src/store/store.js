@@ -7,12 +7,16 @@ import logger from "redux-logger";
 
 import { rootReducer } from "./rootReducer";
 
+// REDUX THUNK
+import { thunk } from "redux-thunk";
+
 /* middleware will not be applied in the production environment. We are using [].filter(Boolean)
  * because we don't want to have any falsy value returning and then applied to composeEnhancers */
 
-const middlewares = [process.env.NODE_ENV !== "production" && logger].filter(
-  Boolean
-);
+const middlewares = [
+  process.env.NODE_ENV !== "production" && logger,
+  thunk,
+].filter(Boolean);
 
 const composeEnhancer =
   (process.env.NODE_ENV !== "production" &&
@@ -25,7 +29,7 @@ const composeEnhancers = composeEnhancer(applyMiddleware(...middlewares));
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["user"],
+  whitelist: ["cart"],
 };
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
