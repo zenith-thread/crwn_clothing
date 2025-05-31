@@ -60,6 +60,19 @@ export const signOutUser = async () => await signOut(auth);
 export const onAuthStateChangedListener = (callback) =>
   onAuthStateChanged(auth, callback);
 
+export const getCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(
+      auth,
+      (userAuth) => {
+        unsubscribe();
+        resolve(userAuth);
+      },
+      reject
+    );
+  });
+};
+
 // FIREBASE DATABASE FUNCTIONALITY
 
 export const db = getFirestore();
@@ -89,7 +102,7 @@ export const createUserDocumentFromAuth = async (
       console.log("Error creating the user,", err.message);
     }
   }
-  return userDocumentReference;
+  return userSnapshot;
 };
 
 export const addCollectionsAndDocuments = async (

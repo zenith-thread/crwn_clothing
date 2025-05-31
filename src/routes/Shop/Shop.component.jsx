@@ -4,9 +4,9 @@ import { Routes, Route } from "react-router";
 
 // REDUX
 import { useDispatch } from "react-redux";
-import { getCategoriesAndDocuments } from "../../utils/firebase/firebase.utils";
-import { fetchCategoriesASync } from "../../store/categories/category.action";
+import { fetchCategoriesStart } from "../../store/categories/category.action";
 
+// COMPONENTS
 import CategoriesPreview from "../categories-preview/CategoriesPreview.component";
 import Category from "../category/Category.component";
 
@@ -14,7 +14,7 @@ const Shop = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchCategoriesASync());
+    dispatch(fetchCategoriesStart());
   }, []);
 
   return (

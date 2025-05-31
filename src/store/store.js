@@ -7,15 +7,18 @@ import logger from "redux-logger";
 
 import { rootReducer } from "./rootReducer";
 
-// REDUX THUNK
-import { thunk } from "redux-thunk";
+// REDUX SAGA
+import createSagaMiddleware from "redux-saga";
+import { rootSaga } from "./rootSaga";
+
+const sagaMiddleware = createSagaMiddleware();
 
 /* middleware will not be applied in the production environment. We are using [].filter(Boolean)
  * because we don't want to have any falsy value returning and then applied to composeEnhancers */
 
 const middlewares = [
   process.env.NODE_ENV !== "production" && logger,
-  thunk,
+  sagaMiddleware,
 ].filter(Boolean);
 
 const composeEnhancer =
@@ -34,5 +37,8 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = createStore(persistedReducer, undefined, composeEnhancers);
+
+// After the saga is applied to the store. run the saga middleware using root saga.
+sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store);

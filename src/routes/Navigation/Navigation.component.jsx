@@ -7,13 +7,13 @@ import CrwnLogo from "../../assets/crown.svg?react";
 import CartIcon from "../../components/cart-icon/CartIcon.component";
 import CartDropdown from "../../components/cart-dropdown/CartDropdown.component";
 
-// AUTHENTICATION
-import { signOutUser } from "../../utils/firebase/firebase.utils";
-
 // REDUX
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../store/user/user.selector.js";
 import { selectIsCartOpen } from "../../store/cart/cart.selector.js";
+
+import { useDispatch } from "react-redux";
+import { signOutStart } from "../../store/user/user.action.js";
 
 // STYLED OCOMPONENTS
 import {
@@ -24,9 +24,13 @@ import {
 } from "./Navigation.styles.jsx";
 
 const Navigation = () => {
+  const dispatch = useDispatch();
+
   // REDUX
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
+
+  const signOutUser = () => dispatch(signOutStart());
 
   return (
     <>
