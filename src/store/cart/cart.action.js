@@ -20,6 +20,11 @@ export const deleteItemFromCart = (cartItems, productToDelete) => {
   return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
 };
 
+export const clearEntireCart = (cartItems) => {
+  cartItems = [];
+  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, cartItems);
+};
+
 // HELPER FUNCTIONS
 const addCartItem = (cartItems, productToAdd) => {
   // find if cartItems contains productToAdd
